@@ -1,6 +1,8 @@
 package com.solog.api.controller;
 
-import com.solog.api.request.PostDto;
+import static com.solog.api.request.PostDto.PostCreate;
+import static com.solog.api.response.ApiResponse.success;
+
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
 
     @PostMapping("/posts")
-    public ResponseEntity<?> post(@RequestBody @Valid PostDto.PostCreateRequest postCreateRequest) {
-        log.info("postCreate = {}", postCreateRequest);
+    public ResponseEntity<?> post(@RequestBody @Valid PostCreate postCreate) {
+        log.info("postCreate = {}", postCreate);
 
-        return ResponseEntity.ok().build();
+        return success();
     }
 
 }

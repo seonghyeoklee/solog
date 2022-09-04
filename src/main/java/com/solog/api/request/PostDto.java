@@ -9,7 +9,7 @@ public class PostDto {
 
     @Getter
     @NoArgsConstructor
-    public static class PostCreateRequest {
+    public static class PostCreate {
 
         @NotBlank(message = "타이틀을 입력해주세요.")
         private String title;
@@ -18,7 +18,7 @@ public class PostDto {
         private String content;
 
         @Builder
-        public PostCreateRequest(String title, String content) {
+        public PostCreate(String title, String content) {
             this.title = title;
             this.content = content;
         }
