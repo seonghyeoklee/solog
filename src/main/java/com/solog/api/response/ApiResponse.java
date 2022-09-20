@@ -1,11 +1,12 @@
 package com.solog.api.response;
 
+import com.solog.exception.SologException;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Slf4j
 public class ApiResponse {
@@ -28,11 +29,11 @@ public class ApiResponse {
         return ResponseEntity.internalServerError().body(new ApiResponseEntity<>(errorType));
     }
 
-    public static ResponseEntity<ApiResponseEntity<?>> error(MethodArgumentNotValidException e) {
+    public static ResponseEntity<ApiResponseEntity<?>> error(SologException e) {
         ApiResponseEntity<Object> apiResponse = new ApiResponseEntity<>(ErrorType.ERROR_400_0002);
-        for (FieldError fieldError : e.getFieldErrors()) {
-            apiResponse.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
-        }
+
+        Map<String, String> validation = e.getValidation();
+        // TODO map에 있는 모든 값을 에러처리하도록 수정
 
         return ResponseEntity.badRequest().body(apiResponse);
     }

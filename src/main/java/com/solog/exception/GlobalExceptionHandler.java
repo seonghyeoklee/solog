@@ -23,4 +23,9 @@ public class GlobalExceptionHandler {
         return error(e);
     }
 
+    @ExceptionHandler(SologException.class)
+    public ResponseEntity<?> sologException(SologException e) {
+        return error(e);
+    }
+
 }
