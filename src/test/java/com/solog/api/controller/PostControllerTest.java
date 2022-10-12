@@ -1,5 +1,8 @@
 package com.solog.api.controller;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -10,11 +13,15 @@ import com.solog.api.request.PostDto.PostCreate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest
+@AutoConfigureMockMvc
+@AutoConfigureRestDocs
+@SpringBootTest
 class PostControllerTest {
 
     @Autowired
@@ -32,15 +39,27 @@ class PostControllerTest {
             .build();
 
         mockMvc.perform(
-                post("/posts")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(body))
-            )
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.status").value("400"))
-            .andExpect(jsonPath("$.message").value("Required parameter"))
-            .andExpect(jsonPath("$.validation.title").value("타이틀을 입력해주세요."))
-            .andDo(print());
+                        post("/posts")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(body))
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value("400"))
+                .andExpect(jsonPath("$.message").value("Required parameter"))
+                .andExpect(jsonPath("$.validation.title").value("타이틀을 입력해주세요."))
+                .andDo(print())
+                .andDo(
+                        document("posts",
+                                responseFields(
+                                        fieldWithPath("status").description("Post Id"),
+                                        fieldWithPath("data").description("Post 제목"),
+                                        fieldWithPath("error").description("Post 내용"),
+                                        fieldWithPath("message").description("Post 내용"),
+                                        fieldWithPath("validation.title").description("Post 내용")
+                                )
+                        )
+                );
+
     }
 
     @Test
