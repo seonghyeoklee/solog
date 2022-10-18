@@ -11,6 +11,10 @@ endif::[]
 :toclevels: 2
 :sectlinks:
 
+== curl
+
+include::{snippets}/posts/curl-request.adoc[]
+
 == request
 
 include::{snippets}/posts/http-request.adoc[]
@@ -18,3 +22,15 @@ include::{snippets}/posts/http-request.adoc[]
 == response
 
 include::{snippets}/posts/http-response.adoc[]
+
+== curl
+
+include::{snippets}/posts-not-valid/curl-request.adoc[]
+
+== request
+
+include::{snippets}/posts-not-valid/http-request.adoc[]
+
+== response
+
+include::{snippets}/posts-not-valid/http-response.adoc[]
