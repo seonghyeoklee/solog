@@ -2,10 +2,19 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
-== REQUEST
+= Solog REST API
+솔로그
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+== request
 
 include::{snippets}/posts/http-request.adoc[]
 
-== RESPONSE
+== response
 
 include::{snippets}/posts/http-response.adoc[]
