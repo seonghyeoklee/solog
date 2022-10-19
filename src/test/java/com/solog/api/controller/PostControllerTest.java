@@ -4,13 +4,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solog.api.request.PostDto.PostCreate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.solog.api.config.ApiDocumentationUtils.getDocumentRequest;
+import static com.solog.api.config.ApiDocumentationUtils.getDocumentResponse;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -21,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
+@ExtendWith(RestDocumentationExtension.class)
 @SpringBootTest
 class PostControllerTest {
 
@@ -31,12 +37,12 @@ class PostControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    @DisplayName("/posts 요청시 title 값은 필수다.")
-    void test2() throws Exception {
+    @DisplayName("글 생성 - success")
+    void createPost() throws Exception {
         PostCreate body = PostCreate.builder()
-            .title("")
-            .content("블로그 내용입니다.")
-            .build();
+                .title("게시글 제목입니다.")
+                .content("게시글 내용입니다.")
+                .build();
 
         mockMvc.perform(
                         post("/posts")
@@ -44,50 +50,20 @@ class PostControllerTest {
                                 .content(objectMapper.writeValueAsString(body))
                 )
                 .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value("400"))
-                .andExpect(jsonPath("$.message").value("Required parameter"))
-                .andExpect(jsonPath("$.validation.title").value("타이틀을 입력해주세요."))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("200"))
+                .andExpect(jsonPath("$.data").isEmpty())
+                .andExpect(jsonPath("$.error").isEmpty())
+                .andExpect(jsonPath("$.message").isEmpty())
                 .andDo(
-                        document("posts",
+                        document("post-create",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
                                 responseFields(
-                                        fieldWithPath("status").description("Post Id"),
-                                        fieldWithPath("data").description("Post 제목"),
-                                        fieldWithPath("error").description("Post 내용"),
-                                        fieldWithPath("message").description("Post 내용"),
-                                        fieldWithPath("validation.title").description("Post 타이틀")
-                                )
-                        )
-                );
-    }
-
-    @Test
-    @DisplayName("/posts 요청시 title, content 값은 필수다.")
-    void test3() throws Exception {
-        PostCreate body = PostCreate.builder()
-            .title("")
-            .content("")
-            .build();
-
-        mockMvc.perform(
-                        post("/posts")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(body))
-                ).andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value("400"))
-                .andExpect(jsonPath("$.message").value("Required parameter"))
-                .andExpect(jsonPath("$.validation.title").value("타이틀을 입력해주세요."))
-                .andExpect(jsonPath("$.validation.content").value("컨텐츠을 입력해주세요."))
-                .andDo(
-                        document("posts-not-valid",
-                                responseFields(
-                                        fieldWithPath("status").description("Post Id"),
-                                        fieldWithPath("data").description("Post 제목"),
-                                        fieldWithPath("error").description("Post 내용"),
-                                        fieldWithPath("message").description("Post 내용"),
-                                        fieldWithPath("validation.title").description("Post 타이틀"),
-                                        fieldWithPath("validation.content").description("Post 내용")
+                                        fieldWithPath("status").type(JsonFieldType.NUMBER).description("응답상태코드"),
+                                        fieldWithPath("data").type(JsonFieldType.NULL).description("응답데이터"),
+                                        fieldWithPath("error").type(JsonFieldType.NULL).description("에러코드"),
+                                        fieldWithPath("message").type(JsonFieldType.NULL).description("에러메시지")
                                 )
                         )
                 );

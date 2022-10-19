@@ -2,35 +2,32 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
-= Solog REST API
-솔로그
-:doctype: book
-:icons: font
-:source-highlighter: highlightjs
 :toc: left
 :toclevels: 2
+:source-highlighter: highlightjs
+:icons: font
+:doctype: book
 :sectlinks:
 
-== curl
+= Solog REST-API
 
-include::{snippets}/posts/curl-request.adoc[]
+== Post API
 
-== request
+=== 게시글 작성
 
-include::{snippets}/posts/http-request.adoc[]
+.curl
 
-== response
+include::{snippets}/post-create/curl-request.adoc[]
 
-include::{snippets}/posts/http-response.adoc[]
+.request
 
-== curl
+include::{snippets}/post-create/http-request.adoc[]
 
-include::{snippets}/posts-not-valid/curl-request.adoc[]
+.response
 
-== request
+include::{snippets}/post-create/http-response.adoc[]
 
-include::{snippets}/posts-not-valid/http-request.adoc[]
+.response-fields
 
-== response
+include::{snippets}/post-create/response-fields.adoc[]
 
-include::{snippets}/posts-not-valid/http-response.adoc[]
